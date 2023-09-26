@@ -24,6 +24,11 @@ void read_command(char *command, char *parameters[])
     char *token = strtok(input, " ");
     strcpy(command, token);
 
+    if (strcspn(command, "exit") == 0) {
+        printf("Finalizando o Shell....\n\n");
+        exit(0);
+    }
+    
     int i = 0;
     while (token != NULL && i < MAX_PARAMETERS)
     {
