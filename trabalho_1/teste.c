@@ -11,7 +11,7 @@
 
 void type_prompt()
 {
-    printf("Shell> ");
+    printf(">>> ");
 }
 
 void read_command(char *command, char *parameters[])
@@ -22,13 +22,14 @@ void read_command(char *command, char *parameters[])
     input[strcspn(input, "\n")] = '\0';
 
     char *token = strtok(input, " ");
-    strcpy(command, token);
+    strncpy(command, token, MAX_COMMAND_LENGTH);
 
-    if (strcspn(command, "exit") == 0) {
-        printf("Finalizando o Shell....\n\n");
+    if (strcmp(command, "exit") == 0)
+    {
+        printf("\nSaindo do shell...\n\n");
         exit(0);
     }
-    
+
     int i = 0;
     while (token != NULL && i < MAX_PARAMETERS)
     {
@@ -48,6 +49,7 @@ int main()
     system("clear");
     printf("Bem vindo ao shell simplificado!\n\n");
 
+
     while (TRUE)
     {
         type_prompt();
@@ -59,7 +61,11 @@ int main()
         }
         else
         {
-            execvp(command, parameters);
+            if(execvp(command, parameters) < 0)
+            {
+                printf("Falha ao executar o comando.\n");
+                break;
+            }
         }
     }
     return 0;
