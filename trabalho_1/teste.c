@@ -9,6 +9,16 @@
 #define MAX_COMMAND_LENGTH 100
 #define MAX_PARAMETERS 10
 
+void print_command_and_parameters(char *command, char **parameters) 
+{ 
+    printf("Command: %s\n", command); 
+    printf("Parameters:\n"); 
+    for (int i = 0; parameters[i] != NULL; i++) 
+    { 
+        printf("  - %s\n", parameters[i]); 
+    } 
+} 
+
 void type_prompt()
 {
     printf(">>> ");
@@ -54,6 +64,7 @@ int main()
     {
         type_prompt();
         read_command(command, parameters);
+        print_command_and_parameters(command, parameters);
 
         if (fork() != 0)
         {
