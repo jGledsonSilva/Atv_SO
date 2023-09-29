@@ -17,11 +17,6 @@ void print_command_and_parameters(char *command, char **parameters)
     { 
         printf("  - %s\n", parameters[i]); 
     } 
-} 
-
-void type_prompt()
-{
-    printf(">>> ");
 }
 
 void read_command(char *command, char *parameters[])
@@ -32,7 +27,10 @@ void read_command(char *command, char *parameters[])
     input[strcspn(input, "\n")] = '\0';
 
     char *token = strtok(input, " ");
-    strncpy(command, token, MAX_COMMAND_LENGTH);
+    if (token != NULL)
+    {    
+        strncpy(command, token, MAX_COMMAND_LENGTH);
+    }
 
     if (strcmp(command, "exit") == 0)
     {
@@ -62,9 +60,9 @@ int main()
 
     while (TRUE)
     {
-        type_prompt();
+        printf(">: ");
         read_command(command, parameters);
-        print_command_and_parameters(command, parameters);
+        //print_command_and_parameters(command, parameters);
 
         if (fork() != 0)
         {
