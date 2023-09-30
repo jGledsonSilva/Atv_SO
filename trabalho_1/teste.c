@@ -9,16 +9,6 @@
 #define MAX_COMANDO 100
 #define MAX_PARAMETROS 10
 
-void print_command_and_parameters(char *command, char **parameters)
-{
-    printf("Command: %s\n", command);
-    printf("Parameters:\n");
-    for (int i = 0; parameters[i] != NULL; i++)
-    {
-        printf("  - %s\n", parameters[i]);
-    }
-}
-
 void ler_comando(char *comando, char *parametro[])
 {
     char input[MAX_COMANDO];
@@ -30,22 +20,22 @@ void ler_comando(char *comando, char *parametro[])
     if (token != NULL)
     {
         strcpy(comando, token);
-    }
 
-    if (strcmp(comando, "exit") == 0)
-    {
-        printf("\nSaindo do shell...\n\n");
-        exit(0);
-    }
+        if (strcmp(comando, "exit") == 0)
+        {
+            printf("\nSaindo do shell...\n\n");
+            exit(0);
+        }
 
-    int i = 0;
-    while (token != NULL && i < MAX_PARAMETROS)
-    {
-        parametro[i] = token;
-        token = strtok(NULL, " ");
-        i++;
+        int i = 0;
+        while (token != NULL && i < MAX_PARAMETROS)
+        {
+            parametro[i] = strdup(token);
+            token = strtok(NULL, " ");
+            i++;
+        }
+        parametro[i] = NULL;
     }
-    parametro[i] = NULL;
 }
 
 int main()
@@ -61,7 +51,6 @@ int main()
     {
         printf(">: ");
         ler_comando(comando, parametro);
-        // print_command_and_parameters(command, parameters);
 
         if (fork() != 0)
         {
