@@ -6,63 +6,62 @@
 #include <string.h>
 
 #define TRUE 1
-#define MAX_COMMAND_LENGTH 100
-#define MAX_PARAMETERS 10
+#define MAX_COMANDO 100
+#define MAX_PARAMETROS 10
 
-void print_command_and_parameters(char *command, char **parameters) 
-{ 
-    printf("Command: %s\n", command); 
-    printf("Parameters:\n"); 
-    for (int i = 0; parameters[i] != NULL; i++) 
-    { 
-        printf("  - %s\n", parameters[i]); 
-    } 
+void print_command_and_parameters(char *command, char **parameters)
+{
+    printf("Command: %s\n", command);
+    printf("Parameters:\n");
+    for (int i = 0; parameters[i] != NULL; i++)
+    {
+        printf("  - %s\n", parameters[i]);
+    }
 }
 
-void read_command(char *command, char *parameters[])
+void ler_comando(char *comando, char *parametro[])
 {
-    char input[MAX_COMMAND_LENGTH];
+    char input[MAX_COMANDO];
     fgets(input, sizeof(input), stdin);
 
     input[strcspn(input, "\n")] = '\0';
 
     char *token = strtok(input, " ");
     if (token != NULL)
-    {    
-        strncpy(command, token, MAX_COMMAND_LENGTH);
+    {
+        strcpy(comando, token);
     }
 
-    if (strcmp(command, "exit") == 0)
+    if (strcmp(comando, "exit") == 0)
     {
         printf("\nSaindo do shell...\n\n");
         exit(0);
     }
 
     int i = 0;
-    while (token != NULL && i < MAX_PARAMETERS)
+    while (token != NULL && i < MAX_PARAMETROS)
     {
-        parameters[i] = token;
+        parametro[i] = token;
         token = strtok(NULL, " ");
         i++;
     }
-    parameters[i] = NULL;
+    parametro[i] = NULL;
 }
 
 int main()
 {
-    char command[MAX_COMMAND_LENGTH];
-    char *parameters[MAX_PARAMETERS + 1];
+    char comando[MAX_COMANDO];
+    char *parametro[MAX_PARAMETROS + 1];
     int status;
 
     system("clear");
     printf("Bem vindo ao shell simplificado!\n\n");
 
-
     while (TRUE)
     {
         printf(">: ");
-        read_command(command, parameters);
-        //print_command_and_parameters(command, parameters);
+        ler_comando(comando, parametro);
+        // print_command_and_parameters(command, parameters);
 
         if (fork() != 0)
         {
@@ -70,8 +69,9 @@ int main()
         }
         else
         {
-            if(execvp(command, parameters) < 0)
+            if (execvp(comando, parametro) < 0)
             {
+                perror("execvp");
                 printf("Falha ao executar o comando.\n");
                 break;
             }
